@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { DatabaseConfig } from 'src/interfaces/config.interface';
 
 /**
  * Configuring Database connnection (postgresql)
@@ -9,10 +11,28 @@ import { SequelizeModule } from '@nestjs/sequelize';
 @Module({
   imports: [
     SequelizeModule.forRootAsync({
-      useFactory: () => ({
-        dialect: 'postgres',
-        autoLoadModels: true,
-      }),
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        const {
+          host,
+          port,
+          user: username,
+          pass: password,
+          name: database,
+          schema,
+        } = config.get<DatabaseConfig>('database')!;
+
+        return {
+          dialect: 'postgres',
+          host,
+          port,
+          username,
+          password,
+          database,
+          schema,
+          autoLoadModels: true,
+        };
+      },
     }),
   ],
 })

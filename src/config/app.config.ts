@@ -4,13 +4,16 @@
  * Also we can validate required configs before spinning-up the service.
  */
 
-export default () => ({
+import { AppConfig } from 'src/interfaces/config.interface';
+
+export default (): AppConfig => ({
   port: parseInt(process.env.PORT!, 10) || 4000,
   database: {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    name: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    pass: process.env.DB_PASS,
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT!, 10) || 5432,
+    name: process.env.DB_NAME || 'trader',
+    user: process.env.DB_USER || 'postgres',
+    pass: process.env.DB_PASS || 'postgres',
+    schema: process.env.DB_SCHEMA || 'public',
   },
 });
