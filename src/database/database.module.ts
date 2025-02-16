@@ -10,6 +10,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
   imports: [
     SequelizeModule.forRootAsync({
       useFactory: () => ({
+        dialect: 'postgres',
         autoLoadModels: true,
       }),
     }),
