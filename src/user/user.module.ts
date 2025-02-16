@@ -10,5 +10,6 @@ import { UtilsModule } from 'src/common/utils/utils.module';
   imports: [SequelizeModule.forFeature([User]), UtilsModule],
   controllers: [UserController],
   providers: [UserService, UserSeeder],
+  exports: [UserService],
 })
 export class UserModule {}

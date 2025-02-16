@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import appConfig from './config/app.config';
 import { APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from 'nestjs-zod';
+import { AuthModule } from './auth/auth.module';
 
 /**
  * Add Zod schema validation pipe globally - it will use defined DTOs to validate.
@@ -21,6 +22,7 @@ import { ZodValidationPipe } from 'nestjs-zod';
     TradeHistoryModule,
     UserModule,
     DatabaseModule,
+    AuthModule,
   ],
   providers: [
     {

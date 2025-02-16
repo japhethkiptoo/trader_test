@@ -17,4 +17,7 @@ export default (): AppConfig => ({
     schema: process.env.DB_SCHEMA || 'public',
   },
   password_salt_rounds: parseInt(process.env.PASSWORD_SALT_ROUNDS!, 10) || 10,
+  jwt_token: {
+    secret: process.env.JWT_SECRET || '78eiweiwrye9t545ythgh94',
+  },
 });
