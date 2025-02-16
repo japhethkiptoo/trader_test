@@ -16,7 +16,7 @@ export class TradeHistoryService {
   /**
    * Add new trade history
    */
-  async create(payload: CreateTradeHistoryDto) {
+  async create(payload: CreateTradeHistoryDto & { user_id: string | number }) {
     try {
       await this.tradeHistoryModel.create({
         ...payload,

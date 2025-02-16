@@ -6,6 +6,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { UtilsModule } from 'src/common/utils/utils.module';
 import { ConfigService } from '@nestjs/config';
 import { JWTConfig } from 'src/interfaces/config.interface';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './jwt.strategy';
 
 /**
  * Register Jsonwebtoken module
@@ -15,18 +17,25 @@ import { JWTConfig } from 'src/interfaces/config.interface';
   imports: [
     UserModule,
     UtilsModule,
+    PassportModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        const { secret } = configService.get<JWTConfig>('jwt_token')!;
+        const { secret, expiresIn } =
+          configService.get<JWTConfig>('jwt_token')!;
 
         return {
           secret,
+          global: true,
+          signOptions: {
+            expiresIn,
+          },
         };
       },
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, JwtStrategy],
+  exports: [JwtModule],
 })
 export class AuthModule {}

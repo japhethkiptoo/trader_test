@@ -19,5 +19,6 @@ export default (): AppConfig => ({
   password_salt_rounds: parseInt(process.env.PASSWORD_SALT_ROUNDS!, 10) || 10,
   jwt_token: {
     secret: process.env.JWT_SECRET || '78eiweiwrye9t545ythgh94',
+    expiresIn: process.env.JWT_EXPIRED_IN || '30m',
   },
 });

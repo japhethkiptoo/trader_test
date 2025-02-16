@@ -9,6 +9,7 @@ export type DatabaseConfig = {
 
 export type JWTConfig = {
   secret: string;
+  expiresIn: string;
 };
 
 export type AppConfig = {
