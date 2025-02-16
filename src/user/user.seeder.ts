@@ -5,7 +5,8 @@ import { PasswordUtility } from 'src/common/utils/password.utility';
 
 /**
  * We will be using this service to handle seeding for user data -> master/follower
- * Two users at-most
+ * this will only be used when we do not have any users
+ * it will execute on module init (bootstrapping of the application)
  */
 
 @Injectable()
