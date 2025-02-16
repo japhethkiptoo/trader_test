@@ -16,4 +16,5 @@ export default (): AppConfig => ({
     pass: process.env.DB_PASS || 'postgres',
     schema: process.env.DB_SCHEMA || 'public',
   },
+  password_salt_rounds: parseInt(process.env.PASSWORD_SALT_ROUNDS!, 10) || 10,
 });

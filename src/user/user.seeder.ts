@@ -1,6 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './entities/user.entity';
+import { PasswordUtility } from 'src/common/utils/password.utility';
 
 /**
  * We will be using this service to handle seeding for user data -> master/follower
@@ -9,15 +10,24 @@ import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserSeeder implements OnModuleInit {
-  constructor(@InjectModel(User) private userModel: typeof User) {}
+  constructor(
+    @InjectModel(User) private userModel: typeof User,
+    private passwordService: PasswordUtility,
+  ) {}
 
-  onModuleInit() {
-    this.seed();
+  async onModuleInit() {
+    //Check if we have no users and seed
+    const user_count = await this.userModel.count();
+
+    if (user_count == 0) {
+      await this.seed();
+    }
   }
 
-  seed() {
+  async seed() {
     try {
-      const password = 'password';
+      // Using the passwordutility to hash password
+      const password = await this.passwordService.hashPassword('password');
 
       const users: Partial<User>[] = [
         {
@@ -40,9 +50,8 @@ export class UserSeeder implements OnModuleInit {
         },
       ];
 
-      const result = this.userModel.bulkBuild(users);
+      await this.userModel.bulkCreate(users);
 
-      console.log(result);
       Logger.log(`Users seeded successfully!`);
     } catch (e) {
       Logger.error(`Error seeding Users:`, e);

@@ -10,4 +10,5 @@ export type DatabaseConfig = {
 export type AppConfig = {
   port: number;
   database: DatabaseConfig;
+  password_salt_rounds: number;
 };
