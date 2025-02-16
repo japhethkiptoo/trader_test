@@ -1,26 +1,71 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTradeHistoryDto } from './dto/create-trade_history.dto';
-import { UpdateTradeHistoryDto } from './dto/update-trade_history.dto';
+import { TradeHistory } from './entities/trade_history.entity';
+import { InjectModel } from '@nestjs/sequelize';
+
+type FindUserTradesPayload = {
+  user_id: string;
+};
 
 @Injectable()
 export class TradeHistoryService {
-  create(createTradeHistoryDto: CreateTradeHistoryDto) {
-    return 'This action adds a new tradeHistory';
+  constructor(
+    @InjectModel(TradeHistory) private tradeHistoryModel: typeof TradeHistory,
+  ) {}
+
+  /**
+   * Add new trade history
+   */
+  async create(payload: CreateTradeHistoryDto) {
+    try {
+      await this.tradeHistoryModel.create({
+        ...payload,
+      });
+
+      return { success: true };
+    } catch (e) {
+      throw e;
+    }
   }
 
-  findAll() {
-    return `This action returns all tradeHistory`;
+  /**
+   * Fetch all trades for a specific user.
+   *
+   */
+
+  async findUserTrades(payload: FindUserTradesPayload) {
+    try {
+      const { user_id } = payload;
+      const results = await this.tradeHistoryModel.findAll({
+        where: {
+          user_id,
+        },
+      });
+
+      return results;
+    } catch (e) {
+      throw e;
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tradeHistory`;
-  }
+  /**
+   * Fetch a single trade by trade id and user_id
+   */
 
-  update(id: number, updateTradeHistoryDto: UpdateTradeHistoryDto) {
-    return `This action updates a #${id} tradeHistory`;
-  }
+  async findTrade(user_id: string | number, trade_id: string | number) {
+    try {
+      const trade = await this.tradeHistoryModel.findOne({
+        where: {
+          user_id,
+          id: trade_id,
+        },
+      });
 
-  remove(id: number) {
-    return `This action removes a #${id} tradeHistory`;
+      if (!trade) throw new NotFoundException(`Trade not found`);
+
+      return trade;
+    } catch (e) {
+      throw e;
+    }
   }
 }

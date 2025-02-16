@@ -1,45 +1,34 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { TradeHistoryService } from './trade_history.service';
 import { CreateTradeHistoryDto } from './dto/create-trade_history.dto';
-import { UpdateTradeHistoryDto } from './dto/update-trade_history.dto';
 
 @Controller('trade-history')
 export class TradeHistoryController {
   constructor(private readonly tradeHistoryService: TradeHistoryService) {}
 
   @Post()
-  create(@Body() createTradeHistoryDto: CreateTradeHistoryDto) {
-    return this.tradeHistoryService.create(createTradeHistoryDto);
+  async create(@Body() createTradeHistoryDto: CreateTradeHistoryDto) {
+    return await this.tradeHistoryService.create(createTradeHistoryDto);
   }
 
-  @Get()
-  findAll() {
-    return this.tradeHistoryService.findAll();
+  @Get(':user_id')
+  async findUserTrades(@Param('user_id') user_id: string) {
+    try {
+      return await this.tradeHistoryService.findUserTrades({ user_id });
+    } catch (e) {
+      throw e;
+    }
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tradeHistoryService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateTradeHistoryDto: UpdateTradeHistoryDto,
+  @Get(':user_id/:trade_id')
+  async findTrade(
+    @Param('user_id') user_id: string,
+    @Param('trade_id') trade_id: string,
   ) {
-    return this.tradeHistoryService.update(+id, updateTradeHistoryDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tradeHistoryService.remove(+id);
+    try {
+      return await this.tradeHistoryService.findTrade(user_id, trade_id);
+    } catch (e) {
+      throw e;
+    }
   }
 }
