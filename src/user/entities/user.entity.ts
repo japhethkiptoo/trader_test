@@ -2,10 +2,12 @@ import {
   AllowNull,
   Column,
   DataType,
+  HasMany,
   Model,
   Table,
   Unique,
 } from 'sequelize-typescript';
+import { TradeHistory } from 'src/trade_history/entities/trade_history.entity';
 
 @Table({ tableName: 'users', timestamps: true, paranoid: true })
 export class User extends Model {
@@ -29,4 +31,7 @@ export class User extends Model {
     defaultValue: 'follower',
   })
   role: string;
+
+  @HasMany(() => TradeHistory)
+  trade_history: TradeHistory[];
 }
