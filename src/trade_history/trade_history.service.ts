@@ -3,6 +3,7 @@ import { CreateTradeHistoryDto } from './dto/create-trade_history.dto';
 import { TradeHistory } from './entities/trade_history.entity';
 import { InjectModel } from '@nestjs/sequelize';
 import { PaginationUtility } from 'src/common/utils/pagination.utility';
+import { PaginatedResponse } from 'src/interfaces/pagination.interface';
 
 type FindUserTradesPayload = {
   user_id: string;
@@ -38,7 +39,9 @@ export class TradeHistoryService {
    *
    */
 
-  async findUserTrades(payload: FindUserTradesPayload) {
+  async findUserTrades(
+    payload: FindUserTradesPayload,
+  ): Promise<PaginatedResponse<TradeHistory>> {
     try {
       const { user_id, limit = 10, page = 1 } = payload;
       const pagination_options = this.paginationUtil.getPaginationOptions(

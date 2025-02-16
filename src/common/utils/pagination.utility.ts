@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { PaginatedResponse } from 'src/interfaces/pagination.interface';
 
 /**
  * Pagination utility
@@ -14,7 +15,12 @@ export class PaginationUtility {
   }
 
   //return paginated data
-  paginate<T>(data: T[], total: number, page: number = 1, limit: number = 1) {
+  paginate<T>(
+    data: T[],
+    total: number,
+    page: number = 1,
+    limit: number = 1,
+  ): PaginatedResponse<T> {
     // calculate total pages
     const total_pages = Math.ceil(total / limit);
     return {
