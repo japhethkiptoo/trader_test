@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PasswordUtility } from './password.utility';
+import { PaginationUtility } from './pagination.utility';
 
 /**
  *
@@ -7,7 +8,7 @@ import { PasswordUtility } from './password.utility';
  */
 
 @Module({
-  providers: [PasswordUtility],
-  exports: [PasswordUtility],
+  providers: [PasswordUtility, PaginationUtility],
+  exports: [PasswordUtility, PaginationUtility],
 })
 export class UtilsModule {}

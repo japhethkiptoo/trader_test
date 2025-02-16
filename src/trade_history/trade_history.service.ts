@@ -2,15 +2,19 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTradeHistoryDto } from './dto/create-trade_history.dto';
 import { TradeHistory } from './entities/trade_history.entity';
 import { InjectModel } from '@nestjs/sequelize';
+import { PaginationUtility } from 'src/common/utils/pagination.utility';
 
 type FindUserTradesPayload = {
   user_id: string;
+  limit?: number;
+  page?: number;
 };
 
 @Injectable()
 export class TradeHistoryService {
   constructor(
     @InjectModel(TradeHistory) private tradeHistoryModel: typeof TradeHistory,
+    private readonly paginationUtil: PaginationUtility,
   ) {}
 
   /**
@@ -35,14 +39,22 @@ export class TradeHistoryService {
 
   async findUserTrades(payload: FindUserTradesPayload) {
     try {
-      const { user_id } = payload;
-      const results = await this.tradeHistoryModel.findAll({
-        where: {
-          user_id,
-        },
-      });
+      const { user_id, limit = 10, page = 1 } = payload;
+      const pagination_options = this.paginationUtil.getPaginationOptions(
+        page,
+        limit,
+      );
 
-      return results;
+      const { rows: data, count: total } =
+        await this.tradeHistoryModel.findAndCountAll({
+          where: {
+            user_id,
+          },
+          ...pagination_options,
+          order: [['timestamp', 'DESC']],
+        });
+
+      return this.paginationUtil.paginate(data, total, page, limit);
     } catch (e) {
       throw e;
     }

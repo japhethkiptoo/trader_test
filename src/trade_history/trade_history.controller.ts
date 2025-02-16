@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   Controller,
   Get,
@@ -8,6 +6,7 @@ import {
   Param,
   UseGuards,
   Req,
+  Query,
 } from '@nestjs/common';
 import { TradeHistoryService } from './trade_history.service';
 import { CreateTradeHistoryDto } from './dto/create-trade_history.dto';
@@ -36,9 +35,17 @@ export class TradeHistoryController {
 
   @Get(':user_id')
   @UseGuards(RoleGuard, OwnGuard)
-  async findUserTrades(@Param('user_id') user_id: string) {
+  async findUserTrades(
+    @Param('user_id') user_id: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
     try {
-      return await this.tradeHistoryService.findUserTrades({ user_id });
+      return await this.tradeHistoryService.findUserTrades({
+        user_id,
+        page,
+        limit,
+      });
     } catch (e) {
       throw e;
     }
