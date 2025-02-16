@@ -13,13 +13,16 @@ import { TradeHistoryService } from './trade_history.service';
 import { CreateTradeHistoryDto } from './dto/create-trade_history.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { RoleGuard } from 'src/auth/role.guard';
+import { Roles } from 'src/auth/role.decorator';
+import { OwnGuard } from 'src/auth/own.guard';
 
+@UseGuards(AuthGuard)
+@Roles('master', 'trader', 'follower')
 @Controller('trade-history')
 export class TradeHistoryController {
   constructor(private readonly tradeHistoryService: TradeHistoryService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
   async create(
     @Body() createTradeHistoryDto: CreateTradeHistoryDto,
     @Req() req: any,
@@ -32,7 +35,7 @@ export class TradeHistoryController {
   }
 
   @Get(':user_id')
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(RoleGuard, OwnGuard)
   async findUserTrades(@Param('user_id') user_id: string) {
     try {
       return await this.tradeHistoryService.findUserTrades({ user_id });
@@ -42,7 +45,7 @@ export class TradeHistoryController {
   }
 
   @Get(':user_id/:trade_id')
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(RoleGuard, OwnGuard)
   async findTrade(
     @Param('user_id') user_id: string,
     @Param('trade_id') trade_id: string,
