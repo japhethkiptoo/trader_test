@@ -28,7 +28,7 @@ export class User extends Model {
   //Role as a string - assumption that roles rarely change: enum (master, follower)
   @Column({
     type: DataType.ENUM,
-    values: ['master', 'follower', 'trader'],
+    values: ['master', 'follower', 'trader', 'admin'],
     defaultValue: 'follower',
   })
   role: Role;

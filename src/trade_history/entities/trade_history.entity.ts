@@ -4,6 +4,7 @@ import {
   Column,
   DataType,
   ForeignKey,
+  Index,
   Model,
   Table,
 } from 'sequelize-typescript';
@@ -14,7 +15,6 @@ import { User } from 'src/user/entities/user.entity';
   tableName: 'trade_histories',
   timestamps: true,
   paranoid: true,
-  createdAt: 'timestamp',
 })
 export class TradeHistory extends Model {
   @AllowNull(false)
@@ -31,15 +31,15 @@ export class TradeHistory extends Model {
 
   @AllowNull(false)
   @Column({
-    type: DataType.FLOAT,
+    type: DataType.DECIMAL(18, 8),
   })
-  amount: string | number;
+  amount: number;
 
   @AllowNull(false)
   @Column({
-    type: DataType.FLOAT,
+    type: DataType.DECIMAL(18, 8),
   })
-  price: string | number;
+  price: number;
 
   @AllowNull(false)
   @Column({
@@ -47,6 +47,14 @@ export class TradeHistory extends Model {
   })
   status: TradeStatus;
 
+  @Column({
+    type: DataType.DATE,
+    defaultValue: DataType.NOW,
+  })
+  timestamp: Date;
+
+  //setup index on user_id since we are filtering trades by user_id
+  @Index('user_id_index')
   @ForeignKey(() => User)
   @AllowNull(false)
   @Column

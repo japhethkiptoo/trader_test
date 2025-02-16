@@ -8,6 +8,7 @@ const CreateTradeHistorySchema = z.object({
   amount: number().min(0),
   price: number().min(0),
   status: z.enum(['Success', 'Failed']),
+  timestamp: z.string().date().optional(),
 });
 
 //convert zod schema to a DTO

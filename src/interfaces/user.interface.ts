@@ -1,1 +1,1 @@
-export type Role = 'master' | 'follower' | 'trader';
+export type Role = 'master' | 'follower' | 'trader' | 'admin';

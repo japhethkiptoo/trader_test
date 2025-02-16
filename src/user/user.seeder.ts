@@ -49,6 +49,12 @@ export class UserSeeder implements OnModuleInit {
           username: 'follower',
           password,
         },
+        {
+          name: 'Admin',
+          role: 'admin',
+          username: 'admin',
+          password,
+        },
       ];
 
       await this.userModel.bulkCreate(users);

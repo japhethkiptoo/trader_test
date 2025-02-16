@@ -27,7 +27,7 @@ export class TradeHistoryService {
         ...payload,
       });
 
-      return { success: true };
+      return { success: true, message: `Trade created` };
     } catch (e) {
       throw e;
     }
