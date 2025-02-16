@@ -14,7 +14,10 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { RoleGuard } from 'src/auth/role.guard';
 import { Roles } from 'src/auth/role.decorator';
 import { OwnGuard } from 'src/auth/own.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Trade')
 @UseGuards(AuthGuard)
 @Roles('master', 'trader', 'follower')
 @Controller('trade-history')

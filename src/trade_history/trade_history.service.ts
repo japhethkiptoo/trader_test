@@ -22,6 +22,7 @@ export class TradeHistoryService {
    */
   async create(payload: CreateTradeHistoryDto & { user_id: string | number }) {
     try {
+      //creating the trade
       await this.tradeHistoryModel.create({
         ...payload,
       });

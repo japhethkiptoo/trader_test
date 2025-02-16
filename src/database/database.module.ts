@@ -31,6 +31,7 @@ import { DatabaseConfig } from 'src/interfaces/config.interface';
           database,
           schema,
           autoLoadModels: true,
+          logging: false,
         };
       },
     }),
