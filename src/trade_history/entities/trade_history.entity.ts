@@ -17,39 +17,39 @@ import { User } from 'src/user/entities/user.entity';
   createdAt: 'timestamp',
 })
 export class TradeHistory extends Model {
+  @AllowNull(false)
   @Column({
     type: DataType.STRING,
   })
-  @AllowNull(false)
   trade_type: TradeType;
 
+  @AllowNull(false)
   @Column({
     type: DataType.STRING,
   })
-  @AllowNull(false)
   symbol: string;
 
+  @AllowNull(false)
   @Column({
     type: DataType.FLOAT,
   })
-  @AllowNull(false)
   amount: string | number;
 
+  @AllowNull(false)
   @Column({
     type: DataType.FLOAT,
   })
-  @AllowNull(false)
   price: string | number;
 
+  @AllowNull(false)
   @Column({
     type: DataType.STRING,
   })
-  @AllowNull(false)
   status: TradeStatus;
 
   @ForeignKey(() => User)
-  @Column
   @AllowNull(false)
+  @Column
   user_id: number;
 
   @BelongsTo(() => User)
