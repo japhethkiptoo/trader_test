@@ -17,9 +17,13 @@ export class AuthController {
   //applying serializer on login method -> it validate the response
   @ZodSerializerDto(LoginResponseDTO)
   @Post('login')
-  async login(@Body() payload: LoginDTO) {
+  async login(@Body() payload: LoginDTO): Promise<LoginResponseDTO> {
     const { access_token } = await this.authService.login({ ...payload });
 
-    return { success: true, message: `Login successful`, access_token };
+    return {
+      success: true,
+      message: `Login successful`,
+      access_token,
+    };
   }
 }

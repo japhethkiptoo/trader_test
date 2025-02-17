@@ -28,6 +28,8 @@ export class TradeHistoryService {
         ...payload,
       });
 
+      //notify user of a new trade(sockets) - pending
+
       return { success: true, message: `Trade created` };
     } catch (e) {
       throw e;

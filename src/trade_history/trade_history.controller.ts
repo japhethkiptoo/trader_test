@@ -14,7 +14,9 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { RoleGuard } from 'src/auth/role.guard';
 import { Roles } from 'src/auth/role.decorator';
 import { OwnGuard } from 'src/auth/own.guard';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ZodSerializerDto } from 'nestjs-zod';
+import { CreateTradeHistroryResponseDTO } from './dto/create-trade_history-response.dto';
 
 @ApiBearerAuth()
 @ApiTags('Trade')
@@ -24,11 +26,12 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 export class TradeHistoryController {
   constructor(private readonly tradeHistoryService: TradeHistoryService) {}
 
+  @ZodSerializerDto(CreateTradeHistroryResponseDTO)
   @Post()
   async create(
     @Body() createTradeHistoryDto: CreateTradeHistoryDto,
     @Req() req: any,
-  ) {
+  ): Promise<CreateTradeHistroryResponseDTO> {
     const user_id = req.user.user_id;
     return await this.tradeHistoryService.create({
       ...createTradeHistoryDto,
@@ -36,12 +39,16 @@ export class TradeHistoryController {
     });
   }
 
+  //Error:zod serialization not working for paginated records
+  //@ZodSerializerDto(TradeHistoryPaginatedResponseDTO)
   @Get(':user_id')
+  @ApiQuery({ name: 'page', required: false })
+  @ApiQuery({ name: 'limit', required: false })
   @UseGuards(RoleGuard, OwnGuard)
   async findUserTrades(
     @Param('user_id') user_id: string,
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
   ) {
     try {
       return await this.tradeHistoryService.findUserTrades({
@@ -54,6 +61,7 @@ export class TradeHistoryController {
     }
   }
 
+  //@ZodSerializerDto(TradeHistoryResponseDTO)
   @Get(':user_id/:trade_id')
   @UseGuards(RoleGuard, OwnGuard)
   async findTrade(
