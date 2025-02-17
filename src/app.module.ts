@@ -4,8 +4,8 @@ import { UserModule } from './user/user.module';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import appConfig from './config/app.config';
-import { APP_PIPE } from '@nestjs/core';
-import { ZodValidationPipe } from 'nestjs-zod';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod';
 import { AuthModule } from './auth/auth.module';
 
 /**
@@ -29,6 +29,8 @@ import { AuthModule } from './auth/auth.module';
       provide: APP_PIPE,
       useClass: ZodValidationPipe,
     },
+    // global serializer interceptor(zod)
+    { provide: APP_INTERCEPTOR, useClass: ZodSerializerInterceptor },
   ],
 })
 export class AppModule {}
